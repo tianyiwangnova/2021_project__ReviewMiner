@@ -1,6 +1,7 @@
 
-.idea/workspace.xml
+.idea
 sample_data/.DS_Store
 src/__pycache__/__init__.cpython-37.pyc
+src/.DS_Store
 tests/.DS_Store
 .DS_Store

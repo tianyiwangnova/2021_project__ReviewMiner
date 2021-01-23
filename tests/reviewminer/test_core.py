@@ -1,6 +1,7 @@
 from src.reviewminer.core import *
 import pandas as pd
 import pytest
+import numpy
 
 
 class TestReviews(object):

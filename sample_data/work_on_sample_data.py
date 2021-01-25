@@ -2,13 +2,20 @@ from src.reviewminer.core import *
 
 import pandas as pd
 
-from src.reviewminer.core import AspectOpinionExtractor
+class CustomError(Exception): pass
+
+#from src.reviewminer.core import AspectOpinionExtractor
 
 reviews_df = pd.read_csv("reviews.csv")
-print(reviews_df.columns)
 
-aoe = AspectOpinionExtractor(reviews_df, 'id', 'comments')
+re = Reviews(reviews_df)
 
-print(reviews_df.loc[1, "comments"], aoe.aspect_extractor(reviews_df.loc[2, "comments"]))
 
-print(aoe.df.shape[1])
+
+#aoe = AspectOpinionExtractor(reviews_df, 'id', 'comments')
+
+#print(aoe.id_column)
+
+#print(aoe.aspect_extractor("I love drinking orange juice."))
+#print(aoe.aspect_extractor("Orange juice is healthier than and hot coffee"))
+

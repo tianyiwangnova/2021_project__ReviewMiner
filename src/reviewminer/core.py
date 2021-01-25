@@ -2,6 +2,10 @@ from textblob import TextBlob, WordList
 import pandas as pd
 
 
+class ColumnError(Exception):
+    pass
+
+
 class Reviews:
     """
     Information about the reviews data
@@ -16,13 +20,47 @@ class Reviews:
 
         :param df: a data frame where each row is a comment/review; The data frame should have at least an ID column
                    that stores the unique IDs of the comments, and a review column where the actual comments/reviews
-                   are stored
-        :param id_column: the name of the column that stores the unique IDs of the comments
-        :param review_column: the name of the column where the actual comments/reviews are stored
+                   are stored; default: None
+        :param id_column: the name of the column that stores the unique IDs of the comments; default: None
+        :param review_column: the name of the column where the actual comments/reviews are stored; default: None
         """
-        self.df = df[[id_column, review_column]]
-        self.id_column = id_column
-        self.review_column = review_column
+        if df is not None:
+
+            if id_column is not None:
+                self._examine_id_column(df, id_column)
+                self.id_column = id_column
+            else:
+                print("Haven't specified id_column (the name of the column that stores the unique IDs of the comments)")
+
+            if review_column is not None:
+                self._examine_review_column(df, id_column)
+                self.review_column = review_column
+            else:
+                print("Haven't specified review_column (the name of the column where the actual comments/reviews are "
+                      "stored)")
+
+        else:
+            print("There's no reviews data")
+
+    @staticmethod
+    def _examine_id_column(df, id_column):
+        """
+        Examine whether the column actually exists
+        """
+        if not isinstance(id_column, str):
+            raise ColumnError("id_column should be a string")
+        if id_column not in df.columns:
+            raise ColumnError("id_column not in df.columns")
+
+    @staticmethod
+    def _examine_review_column(df, review_column):
+        """
+        Examine whether the column actually exists
+        """
+        if not isinstance(review_column, str):
+            raise ColumnError("review_column should be a string")
+        if review_column not in df.columns:
+            raise ColumnError("review_column not in df.columns")
 
 
 class AspectOpinionExtractor(Reviews):
@@ -40,7 +78,7 @@ class AspectOpinionExtractor(Reviews):
         :param id_column: the name of the column that stores the unique IDs of the comments
         :param review_column: the name of the column where the actual comments/reviews are stored
         """
-        Reviews.__init__(self, df, id_column, review_column)
+        Reviews.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
     @staticmethod
     def aspect_extractor(sentence: str) -> list:

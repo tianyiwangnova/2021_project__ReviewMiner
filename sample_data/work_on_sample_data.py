@@ -10,3 +10,5 @@ print(reviews_df.columns)
 aoe = AspectOpinionExtractor(reviews_df, 'id', 'comments')
 
 print(reviews_df.loc[1, "comments"], aoe.aspect_extractor(reviews_df.loc[2, "comments"]))
+
+print(aoe.df.shape[1])

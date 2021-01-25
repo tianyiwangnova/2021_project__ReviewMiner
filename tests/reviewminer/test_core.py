@@ -14,6 +14,7 @@ class TestReviews(object):
     def test_data_intake(self):
         sample_review = Reviews(self.sample_df, 'id', 'comment')
         assert sample_review.id_column == 'id', "Expected: 'id'; Actual: {}".format(sample_review.id_column)
+        assert sample_review.df.shape[1] == 2, "Expected: 2; Actual: {}".format(sample_review.df.shape[1])
 
 
 

@@ -38,14 +38,20 @@ class TestReviews(object):
         sample_review = Reviews(self.sample_df)
         id_column_exception = 0
         review_column_exception = 0
+
         try:
-            sample_review.id_column = "abcd"
-            sample_review.review_column = "efgh"
+            sample_review.id_column = 'abcd'
+            sample_review.review_column = 'efgh'
         except ColumnError:
             id_column_exception = 1
             review_column_exception = 1
         assert id_column_exception == 1
         assert review_column_exception == 1
+
+        sample_review.id_column = 'id'
+        sample_review.review_column = 'comment'
+        assert sample_review.id_column == 'id'
+        assert sample_review.review_column == 'comment'
 
 
 

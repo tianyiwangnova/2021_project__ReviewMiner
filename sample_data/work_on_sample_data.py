@@ -9,3 +9,5 @@ aoe = AspectOpinionExtractor()
 
 print(aoe.aspect_extractor("Orange juice is healthier than and hot coffee"))
 
+sentence_blob = TextBlob(sentence)
+

@@ -4,6 +4,8 @@ import pytest
 
 class TestAspectOpinionExtractor(object):
 
+    sentence =
+
     sample_df = pd.DataFrame({
         'id': [123, 134],
         'comment': ['I love drinking orange juice. Orange juice is very healthy. It tastes better than hot coffee.',
@@ -14,4 +16,5 @@ class TestAspectOpinionExtractor(object):
         assert aoe.aspect_extractor("Orange juice is healthier than and hot coffee") == \
                ['orange juice', 'hot coffee', 'coffee']
 
+    def test_valid(self):
 

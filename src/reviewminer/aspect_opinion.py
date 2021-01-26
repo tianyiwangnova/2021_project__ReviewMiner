@@ -1,9 +1,9 @@
 from textblob import TextBlob
 from src.reviewminer.basic import *
 import nltk
-# nltk.download('brown')
-# nltk.download('punkt')
-# nltk.download('averaged_perceptron_tagger')
+nltk.download('brown')
+nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')
 
 
 class AspectOpinionExtractor(Reviews):

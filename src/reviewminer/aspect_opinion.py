@@ -2,6 +2,7 @@ from textblob import TextBlob
 from src.reviewminer.basic import *
 import nltk
 nltk.download('brown')
+nltk.download('punkt')
 
 
 class AspectOpinionExtractor(Reviews):
@@ -62,3 +63,16 @@ class AspectOpinionExtractor(Reviews):
         candidate_aspects = [a for a in candidate_aspects if a != 'i']
 
         return candidate_aspects
+
+    @staticmethod
+    def valid(x: int, sentence_blob) -> bool:
+        """
+        Check whether an index(x) is valid
+
+        :param x: an integer
+        :param sentence_blob: a Textblob object
+        :return: bool
+        """
+        return True if x >= 0 and x < len(sentence_blob.tags) else False
+
+

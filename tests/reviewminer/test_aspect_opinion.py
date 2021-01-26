@@ -13,3 +13,5 @@ class TestAspectOpinionExtractor(object):
         aoe = AspectOpinionExtractor()
         assert aoe.aspect_extractor("Orange juice is healthier than and hot coffee") == \
                ['orange juice', 'hot coffee', 'coffee']
+
+

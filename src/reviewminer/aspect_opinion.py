@@ -74,6 +74,6 @@ class AspectOpinionExtractor(Reviews):
         :param sentence_blob: a Textblob object
         :return: bool
         """
-        return True if x >= 0 and x < len(sentence_blob.tags) else False
+        return True if 0 <= x < len(sentence_blob.tags) else False
 
 

@@ -4,7 +4,9 @@ import pytest
 
 class TestAspectOpinionExtractor(object):
 
-    sentence =
+    sentence = 'Orange juice is healthier than and hot coffee'
+    sentence_blob = TextBlob(sentence)
+    aoe_null = AspectOpinionExtractor()
 
     sample_df = pd.DataFrame({
         'id': [123, 134],
@@ -12,9 +14,11 @@ class TestAspectOpinionExtractor(object):
                     'I like hot and humid weather in summer. I will usually swim in the river.']})
 
     def test_aspect_extractor(self):
-        aoe = AspectOpinionExtractor()
-        assert aoe.aspect_extractor("Orange juice is healthier than and hot coffee") == \
+        assert self.aoe_null.aspect_extractor(self.sentence) == \
                ['orange juice', 'hot coffee', 'coffee']
 
     def test_valid(self):
+        assert self.aoe_null.valid(7, self.sentence_blob) is True
+        assert self.aoe_null.valid(8, self.sentence_blob) is False
+
 

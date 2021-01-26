@@ -6,6 +6,7 @@ install:
   - pip install pandas
   - pip install textblob
   - pip install nltk
+  - nltk.download('brown')
 script:
   - pytest --cov=src tests
 after_success:

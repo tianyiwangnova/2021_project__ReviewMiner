@@ -12,6 +12,6 @@ print(aoe.aspect_extractor("Orange juice is healthier than and hot coffee"))
 sentence_blob = TextBlob("Orange juice is healthier than and hot coffee")
 print(sentence_blob.tags)
 
-print(aoe.valid(8, sentence_blob))
+
 
 

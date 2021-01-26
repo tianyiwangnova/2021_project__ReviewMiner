@@ -1,5 +1,7 @@
 from textblob import TextBlob
 from src.reviewminer.basic import *
+import nltk
+nltk.download('brown')
 
 
 class AspectOpinionExtractor(Reviews):

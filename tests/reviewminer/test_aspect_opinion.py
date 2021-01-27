@@ -59,9 +59,9 @@ class TestAspectOpinionExtractor(object):
         sentence1 = 'The coffee is very delicious'
         sentence2 = 'The coffee is not hot'
         sentence3 = "The weather is COOL"
-        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence1)) == 'delicious'
-        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence2)) == 'nothot'
-        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence3)) == 'cool'
+        assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence1)) == 'delicious'
+        assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence2)) == 'nothot'
+        assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence3)) == 'cool'
 
     def test_opinion_extractor(self):
         sentence1 = 'The warm coffee is not hot'

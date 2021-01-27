@@ -5,12 +5,31 @@ import pandas as pd
 
 reviews_df = pd.read_csv("reviews.csv")
 
-aoe = AspectOpinionExtractor()
+print(reviews_df.columns)
 
-print(aoe.aspect_extractor("Orange juice is healthier than and hot coffee"))
+aoe = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
 
-sentence_blob = TextBlob("Orange juice is healthier than and hot coffee")
-print(sentence_blob.tags)
+sentence1 = 'The weather is COOL'
+sentence2 = "I ate eggs for breakfast"
+
+aoe.aspect_opinon_for_all_comments()
+print(aoe.df_with_aspects_opinions)
+# print(aoe.extract_attributes_suff(1, TextBlob(sentence2)))
+
+# candidate_aspects_dict = {}
+# aspect_opinion_dict = {}
+#
+# a = 'coffee'
+# sentence_blob = TextBlob(sentence2)
+# print(sentence_blob.words)
+# first_word_index = sentence_blob.words.index(a.split()[0])
+# last_word_index = sentence_blob.words.index(a.split()[-1])
+# aspect_opinion_dict[a] = aoe.extract_attributes_pref(first_word_index, sentence_blob)
+# print(aspect_opinion_dict)
+
+
+
+
 
 
 

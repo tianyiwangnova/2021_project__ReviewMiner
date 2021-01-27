@@ -40,6 +40,47 @@ class TestAspectOpinionExtractor(object):
         assert self.aoe_null.is_be(10, self.sentence_blob) is False
         assert self.aoe_null.is_be(1, self.sentence_blob) is False
 
+    def test_add_word(self):
+        sentence1 = 'BUSY residential area with very good restaurants'
+        word_list1 = ['busy']
+        assert self.aoe_null.add_word(1, word_list1, TextBlob(sentence1)) == ['busy', 'residential']
+        assert self.aoe_null.add_word(3, word_list1, TextBlob(sentence1)) == ['busy', 'residential']
+        assert self.aoe_null.add_word(4, word_list1, TextBlob(sentence1)) == ['busy', 'residential']
+
+    def test_extract_attributes_pref(self):
+        sentence1 = 'Very nice coffee'
+        sentence2 = 'nice Brazil coffee'
+        sentence3 = "busy residential area"
+        assert self.aoe_null.extract_attributes_pref(2, TextBlob(sentence1)) == 'nice'
+        assert self.aoe_null.extract_attributes_pref(2, TextBlob(sentence2)) == ''
+        assert self.aoe_null.extract_attributes_pref(2, TextBlob(sentence3)) == 'residential busy'
+
+    def test_extract_extract_attributes_suff(self):
+        sentence1 = 'The coffee is very delicious'
+        sentence2 = 'The coffee is not hot'
+        sentence3 = "The weather is COOL"
+        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence1)) == 'delicious'
+        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence2)) == 'nothot'
+        assert self.aoe_null.extract_attributes_suff(2, TextBlob(sentence3)) == 'cool'
+
+    def test_opinion_extractor(self):
+        sentence1 = 'The warm coffee is not hot'
+        sentence2 = 'The sunny bedroom is very spacious, with a beautiful wardrobe'
+        sentence3 = 'I ate eggs for breakfast'
+        assert self.aoe_null.opinion_extractor(['coffee'], TextBlob(sentence1)) == {'coffee': 'warm nothot'}
+        assert self.aoe_null.opinion_extractor(['bedroom', 'wardrobe'], TextBlob(sentence2)) == \
+                {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
+        assert self.aoe_null.opinion_extractor(['eggs'], TextBlob(sentence2)) == {'eggs': ' '}
+
+    def test_aspect_opinion_for_one_comment(self):
+        sen = "The sunny bedroom is very spacious, with a beautiful wardrobe"
+        assert self.aoe_null.aspect_opinion_for_one_comment(sen) == {'sunny bedroom': ' spacious',
+                                                                     'beautiful wardrobe': '',
+                                                                     'bedroom': 'sunny spacious',
+                                                                     'wardrobe': 'beautiful'}
+
+
+
 
 
 

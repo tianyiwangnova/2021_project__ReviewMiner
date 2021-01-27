@@ -70,7 +70,7 @@ class TestAspectOpinionExtractor(object):
         assert self.aoe_null.opinion_extractor(['coffee'], TextBlob(sentence1)) == {'coffee': 'warm nothot'}
         assert self.aoe_null.opinion_extractor(['bedroom', 'wardrobe'], TextBlob(sentence2)) == \
                 {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
-        assert self.aoe_null.opinion_extractor(['eggs'], TextBlob(sentence2)) == {'eggs': ' '}
+        assert self.aoe_null.opinion_extractor(['eggs'], TextBlob(sentence3)) == {'eggs': ' '}
 
     def test_aspect_opinion_for_one_comment(self):
         sen = "The sunny bedroom is very spacious, with a beautiful wardrobe"

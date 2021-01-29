@@ -2,13 +2,6 @@ from src.reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 
-
-import os
-for subdir, dirs, files in os.walk('./'):
-    for file in files:
-      print(file)
-
-
 class TestAspectOpinionExtractor(object):
 
     sentence = 'Orange juice is healthier than and hot coffee'
@@ -27,7 +20,7 @@ class TestAspectOpinionExtractor(object):
     aoe_with_df = AspectOpinionExtractor(sample_df, 'id', 'comments')
     aoe_with_df.aspect_opinon_for_all_comments()
 
-    reviews_df = pd.read_csv("reviews.csv")
+    reviews_df = pd.read_csv("./reviews.csv")
     aoe_with_reivews = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
     aoe_with_reivews.aspect_opinon_for_all_comments()
 
@@ -108,8 +101,6 @@ class TestAspectOpinionExtractor(object):
         expected_df = pd.DataFrame({'opinion' : ['spacious', 'sunny', 'comfortable', 'beautiful'],
                                     '% of people use this word': [100.0, 75.0, 50.0, 25.0]})
         actual_df = self.aoe_with_df.most_popular_opinions("room")
-        print(expected_df)
-        print(actual_df)
         pd.testing.assert_frame_equal(expected_df, actual_df)
 
     @pytest.mark.mpl_image_compa

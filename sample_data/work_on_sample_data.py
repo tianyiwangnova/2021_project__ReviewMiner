@@ -5,7 +5,7 @@ from src.reviewminer.aspect_opinion import *
 
 import pandas as pd
 
-reviews_df = pd.read_csv("reviews.csv")
+reviews_df = pd.read_csv("./reviews.csv")
 
 print(reviews_df.columns)
 

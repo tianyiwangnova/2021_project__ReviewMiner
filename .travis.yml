@@ -8,6 +8,7 @@ install:
   - pip install textblob
   - pip install nltk
   - pip install datetime
+  - pip install seaborn
 script:
   - pytest --cov=src tests
 after_success:

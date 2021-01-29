@@ -2,7 +2,6 @@ from src.reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 
-
 class TestAspectOpinionExtractor(object):
 
     sentence = 'Orange juice is healthier than and hot coffee'
@@ -85,7 +84,7 @@ class TestAspectOpinionExtractor(object):
 
     def test_aspect_opinion_for_one_sentence(self):
         sen = "The sunny bedroom is very spacious, with a beautiful wardrobe"
-        assert self.aoe_null.aspect_opinion_for_one_sentence(sen) == {'sunny bedroom': 'spacious',
+        assert self.aoe_null.aspect_opinion_for_one_sentence(sen) == {'sunny bedroom': ' spacious',
                                                                      'beautiful wardrobe': '',
                                                                      'bedroom': 'sunny spacious',
                                                                      'wardrobe': 'beautiful'}

@@ -20,7 +20,8 @@ class TestAspectOpinionExtractor(object):
     aoe_with_df = AspectOpinionExtractor(sample_df, 'id', 'comments')
     aoe_with_df.aspect_opinon_for_all_comments()
 
-    reviews_df = pd.read_csv("./reviews.csv")
+    reviews_df = pd.read_csv("https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/"
+                             "sample_data/reviews.csv")
     aoe_with_reivews = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
     aoe_with_reivews.aspect_opinon_for_all_comments()
 

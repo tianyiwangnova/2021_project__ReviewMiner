@@ -80,7 +80,7 @@ class AspectOpinionExtractor(Reviews):
         return candidate_aspects
 
     @staticmethod
-    def valid(x: int, sentence_blob: TextBlob) -> bool:
+    def _valid(x: int, sentence_blob: TextBlob) -> bool:
         """
         Check whether an index(x) is valid
 
@@ -91,7 +91,7 @@ class AspectOpinionExtractor(Reviews):
         return True if 0 <= x < len(sentence_blob.tags) else False
 
     @staticmethod
-    def merge_two_dicts(dict1: dict, dict2: dict) -> dict:
+    def _merge_two_dicts(dict1: dict, dict2: dict) -> dict:
         """
         {'a': 'apple', 'b': 'boy'}
         {'a': 'air', 'c': 'cat'}
@@ -109,7 +109,7 @@ class AspectOpinionExtractor(Reviews):
         return dict1
 
     @staticmethod
-    def has_aspect(dict_string: str, aspect: str) -> bool:
+    def _has_aspect(dict_string: str, aspect: str) -> bool:
         """
         Check whether an aspect (a string) is in the keys of a dictionary (the dictionary is in string format like
         "{'a': 'apple', 'b': 'boy'}"
@@ -122,7 +122,7 @@ class AspectOpinionExtractor(Reviews):
         return True if aspect.lower() in aspects else False
 
     @staticmethod
-    def has_opinion(dict_string: str, aspect: str, opinion: str) -> bool:
+    def _has_opinion(dict_string: str, aspect: str, opinion: str) -> bool:
         """
         Check whether an aspect has an opinion
         e.g. "{'building':'tall beautiful magnificent', 'music':'classic pop calm'}" -->
@@ -136,7 +136,7 @@ class AspectOpinionExtractor(Reviews):
         opinions = eval(dict_string)[aspect].lower().split()
         return True if opinion.lower() in opinions else False
 
-    def is_be(self, x: int, sentence_blob: TextBlob) -> bool:
+    def _is_be(self, x: int, sentence_blob: TextBlob) -> bool:
         """
         Check whether the word (sentence_blob[x]) is one of ['am','is','are','was','were']
 
@@ -144,13 +144,13 @@ class AspectOpinionExtractor(Reviews):
         :param sentence_blob: a TextBlob object
         :return: bool
         """
-        return True if self.valid(x, sentence_blob) and sentence_blob.words[x].lower() in ['am', 'is', 'are', 'was',
+        return True if self._valid(x, sentence_blob) and sentence_blob.words[x].lower() in ['am', 'is', 'are', 'was',
                                                                                            'were'] else False
 
-    def add_word(self,
-                 index: int,
-                 word_list: list,
-                 sentence_blob: TextBlob) -> list:
+    def _add_word(self,
+                  index: int,
+                  word_list: list,
+                  sentence_blob: TextBlob) -> list:
         """
         Extract the adverb or adjective;
         Judge whether the index-th word in sentence_blob is an adverb or adjective;
@@ -161,15 +161,15 @@ class AspectOpinionExtractor(Reviews):
         :param sentence_blob: a TextBlob object
         :return: the enriched word list
         """
-        if self.valid(index, sentence_blob):
+        if self._valid(index, sentence_blob):
             if sentence_blob.tags[index][1] in ['RB', 'RBR', 'RBS', 'JJ', 'JJR', 'JJS'] and \
                     sentence_blob.tags[index][0].lower() not in ['very', 'really']:
                 word_list.append(sentence_blob.tags[index][0].lower().strip())
         return word_list
 
-    def extract_attributes_pref(self,
-                                first_word_index: int,
-                                sentence_blob: TextBlob) -> str:
+    def _extract_attributes_pref(self,
+                                 first_word_index: int,
+                                 sentence_blob: TextBlob) -> str:
         """
         Extract the attributes that are right before the aspect in the sentence;
         We look at no more than 2 words before;
@@ -185,17 +185,17 @@ class AspectOpinionExtractor(Reviews):
         """
         pref_words = []
 
-        pref_words = self.add_word(first_word_index - 1, pref_words, sentence_blob)
+        pref_words = self._add_word(first_word_index - 1, pref_words, sentence_blob)
 
         # only when there's a adj/adv one index before the aspect will we look at the work 2 indexes before
         if len(pref_words) > 0:
-            self.add_word(first_word_index - 2, pref_words, sentence_blob)
+            self._add_word(first_word_index - 2, pref_words, sentence_blob)
 
         return ' '.join(pref_words)
 
-    def extract_attributes_suff(self,
-                                ca_last_index: int,
-                                sentence_blob: TextBlob) -> str:
+    def _extract_attributes_suff(self,
+                                 ca_last_index: int,
+                                 sentence_blob: TextBlob) -> str:
         """
         Extract the attributes that are right after the aspect + 'be' in the sentence;
         We look at no more than 2 words after;
@@ -213,16 +213,16 @@ class AspectOpinionExtractor(Reviews):
         suff_words = []
 
         # the adj/adv must come after the "be noun"
-        if self.is_be(ca_last_index + 1, sentence_blob):
-            suff_words = self.add_word(ca_last_index + 2, suff_words, sentence_blob)
+        if self._is_be(ca_last_index + 1, sentence_blob):
+            suff_words = self._add_word(ca_last_index + 2, suff_words, sentence_blob)
 
         # only when there's a qualified adj/adv 2 index after the aspect will we look at the word 3 indexes after
         if len(suff_words) > 0:
-            suff_words = self.add_word(ca_last_index + 3, suff_words, sentence_blob)
+            suff_words = self._add_word(ca_last_index + 3, suff_words, sentence_blob)
 
         # or if the word after 'be' is very or really, we will look at the word 3 indexes after
         if sentence_blob.tags[ca_last_index + 2][0].lower() in ['very', 'really']:
-            suff_words = self.add_word(ca_last_index + 3, suff_words, sentence_blob)
+            suff_words = self._add_word(ca_last_index + 3, suff_words, sentence_blob)
 
         attr = ' '.join(suff_words)
         if len(suff_words) == 2 and suff_words[0] in ['not', "n't"]:
@@ -230,9 +230,9 @@ class AspectOpinionExtractor(Reviews):
 
         return attr
 
-    def opinion_extractor(self,
-                          candidate_aspects: list,
-                          sentence_blob: TextBlob) -> dict:
+    def _opinion_extractor(self,
+                           candidate_aspects: list,
+                           sentence_blob: TextBlob) -> dict:
         """
         Extract the aspects and opinions associated with them in a sentence; returns a dictionary
 
@@ -251,16 +251,16 @@ class AspectOpinionExtractor(Reviews):
                     first_word_index = sentence_blob.words.index(a.split()[0])  # index of the first word of the aspect
                     last_word_index = sentence_blob.words.index(a.split()[-1])  # index of the last word of the aspect
                     # extract the attributes that appear before the aspect in the sentence
-                    aspect_opinion_dict[a] = self.extract_attributes_pref(first_word_index, sentence_blob)
+                    aspect_opinion_dict[a] = self._extract_attributes_pref(first_word_index, sentence_blob)
                     # extract the attributes that appear after the aspect in the sentence
                     aspect_opinion_dict[a] = ' '.join(
-                        [aspect_opinion_dict[a], self.extract_attributes_suff(last_word_index, sentence_blob)])
+                        [aspect_opinion_dict[a], self._extract_attributes_suff(last_word_index, sentence_blob)])
                 except:
                     pass
 
         return aspect_opinion_dict
 
-    def aspect_opinion_for_one_sentence(self, sentence: str) -> dict:
+    def _aspect_opinion_for_one_sentence(self, sentence: str) -> dict:
         """
         Extract aspects and opinions for one sentence
 
@@ -271,7 +271,7 @@ class AspectOpinionExtractor(Reviews):
         sentence = str(sentence).lower()
         sentence_blob = TextBlob(sentence)
         candidate_aspects = self.aspect_extractor(sentence)
-        aspect_opinion_dict = self.opinion_extractor(candidate_aspects, sentence_blob)
+        aspect_opinion_dict = self._opinion_extractor(candidate_aspects, sentence_blob)
 
         return aspect_opinion_dict
 
@@ -287,15 +287,15 @@ class AspectOpinionExtractor(Reviews):
 
         aspect_opinion_dict = {}
         for sentence in sentences:
-            aspect_opinion_dict = self.merge_two_dicts(aspect_opinion_dict,
-                                                       self.aspect_opinion_for_one_sentence(sentence))
+            aspect_opinion_dict = self._merge_two_dicts(aspect_opinion_dict,
+                                                        self._aspect_opinion_for_one_sentence(sentence))
         return aspect_opinion_dict
 
     def aspect_opinon_for_all_comments(self, report_interval: int = 500):
         """
         Extract aspects and opinions for all the comments in a pandas dataframe;
 
-        :param report_interval:
+        :param report_interval: the function will report progress every `report_interval` rows
         :return: a pandas dataframe with id, reviews and the string version of the aspect_opinion_dict
         """
         df = self.df.copy()
@@ -310,7 +310,7 @@ class AspectOpinionExtractor(Reviews):
 
         for i in range(len(df)):
             d = self.aspect_opinion_for_one_comment(df_small.loc[i, review_column])
-            aspect_opinion_dict_all = self.merge_two_dicts(aspect_opinion_dict_all, d)
+            aspect_opinion_dict_all = self._merge_two_dicts(aspect_opinion_dict_all, d)
             df_small.loc[i, 'aspects_opinions'] = str(d)
             if i % report_interval == 0 and i > 0:
                 time_pass = (datetime.datetime.now() - begin).seconds / 60
@@ -344,13 +344,13 @@ class AspectOpinionExtractor(Reviews):
         opinion_top_words = pd.Series(ao_df.set_index("aspects").loc[aspect, 'opinions'].split()) \
                                 .value_counts()[:num_top_words].index.tolist()
         # a subset of the comments that have the aspect
-        comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=aspect)]
+        comments_contain_aspect = df[df['aspects_opinions'].apply(self._has_aspect, aspect=aspect)]
         perc = []  # percentage of the comments with the aspects having that opinion
 
         # count the frequences of the opinions
         for o in opinion_top_words:
             comments_contain_aspect_and_opinion = comments_contain_aspect[
-                comments_contain_aspect['aspects_opinions'].apply(self.has_opinion, aspect=aspect, opinion=o)]
+                comments_contain_aspect['aspects_opinions'].apply(self._has_opinion, aspect=aspect, opinion=o)]
             perc.append(round(len(comments_contain_aspect_and_opinion) / len(comments_contain_aspect), 2) * 100)
 
         aspect_plot = pd.DataFrame({'opinion': opinion_top_words, "% of people use this word": perc}) \
@@ -388,7 +388,7 @@ class AspectOpinionExtractor(Reviews):
         plt.rcParams['xtick.labelsize'] = 20.0
 
         df = self.df_with_aspects_opinions.copy()
-        comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=aspect)]
+        comments_contain_aspect = df[df['aspects_opinions'].apply(self._has_aspect, aspect=aspect)]
 
         ax = sns.barplot(x='opinion', y="% of people use this word", data=aspect_plot)
         ax.set_title("What do people say about {} ? (total {} mentions)".format(aspect, len(comments_contain_aspect)))
@@ -418,7 +418,7 @@ class AspectOpinionExtractor(Reviews):
 
         for i in range(9):
             aspect_plot = self.most_popular_opinions(self.top_aspects[i], 10)
-            comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=self.top_aspects[i])]
+            comments_contain_aspect = df[df['aspects_opinions'].apply(self._has_aspect, aspect=self.top_aspects[i])]
 
             sns.barplot(x='opinion',
                         y="% of people use this word",

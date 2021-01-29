@@ -2,17 +2,28 @@ from src.reviewminer.basic import *
 
 
 from src.reviewminer.aspect_opinion import *
+from src.reviewminer.sentiment import *
+from src.reviewminer.core import *
 
 import pandas as pd
 
 reviews_df = pd.read_csv("./reviews.csv")
 
-print(reviews_df.columns)
+#rm = ReviewMiner(reviews_df.head(100), 'id', 'comments')
+rm = ReviewMiner()
+rm.df = 1
+print(rm.df)
+rm.one_time_analysis()
 
-aoe = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
-aoe.aspect_opinon_for_all_comments()
-aoe.popular_aspects_view()
-#aoe.single_aspect_view("room")
+#print(ss.sentiment_for_one_comment(ss.df.iloc[10,1]))
+
+
+
+
+# aoe = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
+# aoe.aspect_opinon_for_all_comments()
+# aoe.popular_aspects_view()
+# #aoe.single_aspect_view("room")
 #aoe.single_aspect_view("room", num_top_words=5, xticks_rotation=30)
 
 

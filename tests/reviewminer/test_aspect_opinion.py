@@ -2,6 +2,13 @@ from src.reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 
+
+import os
+for subdir, dirs, files in os.walk('./'):
+    for file in files:
+      print(file)
+
+
 class TestAspectOpinionExtractor(object):
 
     sentence = 'Orange juice is healthier than and hot coffee'

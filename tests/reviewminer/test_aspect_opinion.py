@@ -2,17 +2,28 @@ from src.reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 
+
 class TestAspectOpinionExtractor(object):
 
     sentence = 'Orange juice is healthier than and hot coffee'
     sentence_blob = TextBlob(sentence)
-    aoe_null = AspectOpinionExtractor()
     aspect_dict = "{'building':'tall beautiful magnificent', 'music':'classic pop calm'}"
 
     sample_df = pd.DataFrame({
-        'id': [123, 134],
-        'comment': ['I love drinking orange juice. Orange juice is very healthy. It tastes better than hot coffee.',
-                    'I like hot and humid weather in summer. I will usually swim in the river.']})
+        'id': [100, 101, 102, 103],
+        'comments': ['The room is comfortable. The room is spacious.',
+                     'The sunny room is very spacious.',
+                     'The spacious room is sunny',
+                     'The spacious room is sunny. The beautiful room is comfortable']})
+
+    aoe_null = AspectOpinionExtractor()
+
+    aoe_with_df = AspectOpinionExtractor(sample_df, 'id', 'comments')
+    aoe_with_df.aspect_opinon_for_all_comments()
+
+    reviews_df = pd.read_csv("reviews.csv")
+    aoe_with_reivews = AspectOpinionExtractor(reviews_df.head(100), 'id', 'comments')
+    aoe_with_reivews.aspect_opinon_for_all_comments()
 
     def test_aspect_extractor(self):
         assert self.aoe_null.aspect_extractor(self.sentence) == \
@@ -58,7 +69,7 @@ class TestAspectOpinionExtractor(object):
     def test_extract_extract_attributes_suff(self):
         sentence1 = 'The coffee is very delicious'
         sentence2 = 'The coffee is not hot'
-        sentence3 = "The weather is COOL"
+        sentence3 = "The weather is really cool"
         assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence1)) == 'delicious'
         assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence2)) == 'nothot'
         assert self.aoe_null.extract_attributes_suff(1, TextBlob(sentence3)) == 'cool'
@@ -72,12 +83,50 @@ class TestAspectOpinionExtractor(object):
                 {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
         assert self.aoe_null.opinion_extractor(['eggs'], TextBlob(sentence3)) == {'eggs': ' '}
 
-    def test_aspect_opinion_for_one_comment(self):
+    def test_aspect_opinion_for_one_sentence(self):
         sen = "The sunny bedroom is very spacious, with a beautiful wardrobe"
-        assert self.aoe_null.aspect_opinion_for_one_comment(sen) == {'sunny bedroom': ' spacious',
+        assert self.aoe_null.aspect_opinion_for_one_sentence(sen) == {'sunny bedroom': 'spacious',
                                                                      'beautiful wardrobe': '',
                                                                      'bedroom': 'sunny spacious',
                                                                      'wardrobe': 'beautiful'}
+
+    def test_aspect_opinion_for_one_comment(self):
+        comment = 'The room is comfortable. The room is spacious.'
+        assert self.aoe_null.aspect_opinion_for_one_comment(comment) == {'room': ' comfortable  spacious'}
+
+    def test_aspect_opinon_for_all_comments(self):
+        assert len(self.aoe_with_df.df_with_aspects_opinions.loc[0, "aspects_opinions"]) == 34
+        assert self.aoe_with_df.aspects_opinions_df.iloc[0, 0] == 'room'
+
+    def test_most_popular_opinions(self):
+        expected_df = pd.DataFrame({'opinion' : ['spacious', 'sunny', 'comfortable', 'beautiful'],
+                                    '% of people use this word': [100.0, 75.0, 50.0, 25.0]})
+        actual_df = self.aoe_with_df.most_popular_opinions("room")
+        print(expected_df)
+        print(actual_df)
+        pd.testing.assert_frame_equal(expected_df, actual_df)
+
+    @pytest.mark.mpl_image_compa
+    def test_single_aspect_view(self):
+        return self.aoe_with_df.single_aspect_view('room',
+                                                   num_top_words=5,
+                                                   change_figsize=True,
+                                                   xticks_rotation=30,
+                                                   _testing=True)
+
+    @pytest.mark.mpl_image_compa
+    def test_popular_aspects_view(self):
+        return self.aoe_with_reivews.popular_aspects_view(_testing=True)
+
+
+
+
+
+
+
+
+
+
 
 
 

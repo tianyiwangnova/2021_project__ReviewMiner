@@ -1,15 +1,23 @@
 from textblob import TextBlob
 from src.reviewminer.basic import *
 import nltk
+from nltk.tokenize import sent_tokenize
 import datetime
 
 nltk.download('brown')
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
+import matplotlib.pyplot as plt
+import matplotlib.style as style
+import seaborn as sns
+
+style.use('fivethirtyeight')
+plt.rc('xtick', labelsize=20)
+plt.rc('ytick', labelsize=20)
+
 
 class AspectOpinionExtractor(Reviews):
-
     """
     Extract aspects and opnions from the reviews data
     """
@@ -142,11 +150,11 @@ class AspectOpinionExtractor(Reviews):
     def add_word(self,
                  index: int,
                  word_list: list,
-                 sentence_blob) -> list:
+                 sentence_blob: TextBlob) -> list:
         """
         Extract the adverb or adjective;
         Judge whether the index-th word in sentence_blob is an adverb or adjective;
-        The word "very" is not counted
+        The word "very" or "really" is not counted
 
         :param index: the index (x-th item in word_list)
         :param word_list: a list of words
@@ -155,13 +163,13 @@ class AspectOpinionExtractor(Reviews):
         """
         if self.valid(index, sentence_blob):
             if sentence_blob.tags[index][1] in ['RB', 'RBR', 'RBS', 'JJ', 'JJR', 'JJS'] and \
-                    sentence_blob.tags[index][0].lower() != 'very':
-                word_list.append(sentence_blob.tags[index][0].lower())
+                    sentence_blob.tags[index][0].lower() not in ['very', 'really']:
+                word_list.append(sentence_blob.tags[index][0].lower().strip())
         return word_list
 
     def extract_attributes_pref(self,
                                 first_word_index: int,
-                                sentence_blob) -> str:
+                                sentence_blob: TextBlob) -> str:
         """
         Extract the attributes that are right before the aspect in the sentence;
         We look at no more than 2 words before;
@@ -187,7 +195,7 @@ class AspectOpinionExtractor(Reviews):
 
     def extract_attributes_suff(self,
                                 ca_last_index: int,
-                                sentence_blob) -> str:
+                                sentence_blob: TextBlob) -> str:
         """
         Extract the attributes that are right after the aspect + 'be' in the sentence;
         We look at no more than 2 words after;
@@ -212,8 +220,8 @@ class AspectOpinionExtractor(Reviews):
         if len(suff_words) > 0:
             suff_words = self.add_word(ca_last_index + 3, suff_words, sentence_blob)
 
-        # or if the word after 'be' is very, we will look at the word 3 indexes after
-        if sentence_blob.tags[ca_last_index + 2][0].lower() == 'very':
+        # or if the word after 'be' is very or really, we will look at the word 3 indexes after
+        if sentence_blob.tags[ca_last_index + 2][0].lower() in ['very', 'really']:
             suff_words = self.add_word(ca_last_index + 3, suff_words, sentence_blob)
 
         attr = ' '.join(suff_words)
@@ -224,7 +232,7 @@ class AspectOpinionExtractor(Reviews):
 
     def opinion_extractor(self,
                           candidate_aspects: list,
-                          sentence_blob) -> dict:
+                          sentence_blob: TextBlob) -> dict:
         """
         Extract the aspects and opinions associated with them in a sentence; returns a dictionary
 
@@ -252,7 +260,7 @@ class AspectOpinionExtractor(Reviews):
 
         return aspect_opinion_dict
 
-    def aspect_opinion_for_one_comment(self, sentence: str) -> dict:
+    def aspect_opinion_for_one_sentence(self, sentence: str) -> dict:
         """
         Extract aspects and opinions for one sentence
 
@@ -267,7 +275,23 @@ class AspectOpinionExtractor(Reviews):
 
         return aspect_opinion_dict
 
-    def aspect_opinon_for_all_comments(self, report_interval=500):
+    def aspect_opinion_for_one_comment(self, comment: str) -> dict:
+        """
+        Extract aspects and opinions for one comment (which can consist of many sentences)
+
+        :param comment: the comment for analyzing
+        :return: a dictionary with the aspects as keys and the opinions wrapped up as a single string of words
+                 seperated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
+        """
+        sentences = sent_tokenize(comment)
+
+        aspect_opinion_dict = {}
+        for sentence in sentences:
+            aspect_opinion_dict = self.merge_two_dicts(aspect_opinion_dict,
+                                                       self.aspect_opinion_for_one_sentence(sentence))
+        return aspect_opinion_dict
+
+    def aspect_opinon_for_all_comments(self, report_interval: int = 500):
         """
         Extract aspects and opinions for all the comments in a pandas dataframe;
 
@@ -299,9 +323,118 @@ class AspectOpinionExtractor(Reviews):
 
         aspects_opinions_df['opinions'] = aspects_opinions_df.opinions.str.strip()
         aspects_opinions_df['pop'] = aspects_opinions_df['opinions'].apply(len)
-        aspects_opinions_df = aspects_opinions_df[aspects_opinions_df['opinions'] != ""]\
-                              .sort_values(by=['pop'],
-                                           ascending=False).drop('pop', 1)
+        aspects_opinions_df = aspects_opinions_df[aspects_opinions_df['opinions'] != ""] \
+            .sort_values(by=['pop'],
+                         ascending=False).drop('pop', 1)
 
         self.df_with_aspects_opinions = df_small
         self.aspects_opinions_df = aspects_opinions_df
+
+    def most_popular_opinions(self, aspect: str, num_top_words: int = 10) -> pd.DataFrame:
+        """
+        Collect the most popular opinion words for an aspect
+
+        :param aspect: aspect (in a string)
+        :param num_top_words: numbers of most common opinions
+        :return: a dataframe with the most popular opnion words associated with the aspect
+        """
+        ao_df = self.aspects_opinions_df.copy()
+        df = self.df_with_aspects_opinions.copy()
+        # choose the most popular opinions of the aspect
+        opinion_top_words = pd.Series(ao_df.set_index("aspects").loc[aspect, 'opinions'].split()) \
+                                .value_counts()[:num_top_words].index.tolist()
+        # a subset of the comments that have the aspect
+        comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=aspect)]
+        perc = []  # percentage of the comments with the aspects having that opinion
+
+        # count the frequences of the opinions
+        for o in opinion_top_words:
+            comments_contain_aspect_and_opinion = comments_contain_aspect[
+                comments_contain_aspect['aspects_opinions'].apply(self.has_opinion, aspect=aspect, opinion=o)]
+            perc.append(round(len(comments_contain_aspect_and_opinion) / len(comments_contain_aspect), 2) * 100)
+
+        aspect_plot = pd.DataFrame({'opinion': opinion_top_words, "% of people use this word": perc}) \
+            .sort_values(['% of people use this word', 'opinion'], ascending=False)
+        return aspect_plot
+
+    def single_aspect_view(self, aspect: str,
+                           num_top_words=10,
+                           change_figsize=True,
+                           xticks_rotation=45,
+                           _testing=False):
+        """
+        plot popular opinions around an aspect;
+        For example, we are interested in what people say about "staff",
+        We pick the top n popular words people used to describe staff and calcualte among those who have expressed
+        opinion towards "staff", how many percentage of them used certain words;
+        The output will be a bar chart that shows the most popular opnion words associated with the aspect, and
+        their proportions
+
+        :param aspect: aspect (in a string)
+        :param num_top_words: numbers of most common opinions
+        :param change_figsize: bool; change the figsize or not
+        :param xticks_rotation: rotation degree of the xticks
+        :param _testing: bool; If True, the function won't show the chart
+
+        :return: a bar chart
+        """
+        style.use('fivethirtyeight')
+
+        aspect_plot = self.most_popular_opinions(aspect, num_top_words)
+
+        if change_figsize:
+            plt.rcParams['figure.figsize'] = (num_top_words, 5)
+        plt.xticks(rotation=xticks_rotation)
+        plt.rcParams['xtick.labelsize'] = 20.0
+
+        df = self.df_with_aspects_opinions.copy()
+        comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=aspect)]
+
+        ax = sns.barplot(x='opinion', y="% of people use this word", data=aspect_plot)
+        ax.set_title("What do people say about {} ? (total {} mentions)".format(aspect, len(comments_contain_aspect)))
+        ax.set(xlabel="")
+
+        if not _testing:
+            plt.show()
+
+        return ax
+
+    def popular_aspects_view(self, _testing=False):
+        """
+        Quick plot: single_aspect_view for the top 9 aspects
+        """
+        style.use('fivethirtyeight')
+        plt.rcParams.update({'font.size': 10})
+        plt.rcParams['figure.figsize'] = (30, 30)
+        plt.rcParams['xtick.labelsize'] = 10.0
+        plt.rcParams['ytick.labelsize'] = 10.0
+
+        df = self.df_with_aspects_opinions.copy()
+        self.top_aspects = self.aspects_opinions_df.aspects[:9].values
+
+        fig, axes = plt.subplots(3, 3)
+        x = [0, 0, 0, 1, 1, 1, 2, 2, 2]
+        y = [0, 1, 2, 0, 1, 2, 0, 1, 2]
+
+        for i in range(9):
+            aspect_plot = self.most_popular_opinions(self.top_aspects[i], 10)
+            comments_contain_aspect = df[df['aspects_opinions'].apply(self.has_aspect, aspect=self.top_aspects[i])]
+
+            sns.barplot(x='opinion',
+                        y="% of people use this word",
+                        data=aspect_plot,
+                        ax=axes[x[i], y[i]])
+            axes[x[i], y[i]].set_title(
+                "What do people say about {} ? (total {} mentions)" \
+                    .format(self.top_aspects[i], len(comments_contain_aspect)),
+                fontsize=12
+            )
+            axes[x[i], y[i]].set(xlabel="")
+            axes[x[i], y[i]].tick_params(axis='x', rotation=45)
+            plt.xticks(rotation=45)
+
+        plt.subplots_adjust(hspace=0.5)
+        plt.subplots_adjust(wspace=0.5)
+
+        if not _testing:
+            plt.show()

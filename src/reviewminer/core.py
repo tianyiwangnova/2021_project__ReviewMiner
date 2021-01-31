@@ -18,7 +18,7 @@ class ReviewMiner(SentimentScore):
         """
         SentimentScore.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
-    def one_time_analysis(self):
+    def one_time_analysis(self, _testing = False):
 
         try:
             if not isinstance(self.df, pd.DataFrame):
@@ -27,6 +27,21 @@ class ReviewMiner(SentimentScore):
             print("Please assign your review data to the class by `ReviewMiner.df = <your df>`, " \
                   "The table should be a pandas DataFrame. Please specify the id_column and review_" \
                   "column too")
+
+        print("========= Popular aspects and opinions in the data =========")
+
+        self.aspect_opinon_for_all_comments()
+        self.popular_aspects_view(_testing=_testing)
+
+        print("========= Sentiment Analysis =========")
+
+        self.overall_sentiment(_testing=_testing)
+        self.aspects_radar_plot(self.top_aspects, _testing=_testing)
+        self.negative_comments_view(_testing=_testing)
+
+        if _testing:
+            return 1
+
 
 
 

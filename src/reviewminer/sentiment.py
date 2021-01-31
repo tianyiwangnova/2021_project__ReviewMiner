@@ -64,11 +64,14 @@ class SentimentScore(AspectOpinionExtractor):
 
         sentiment_scores = df[self.review_column].apply(self.sentiment_for_one_comment)
         self.sentiment_scores_all = sentiment_scores
-        print("Average sentiment score: {}".format(sentiment_scores.mean()))
-        print("{}% of the comments are positive,； {}% of the comments are neutral; {}% of the comments are negative".format(
-            round(100 * sum(sentiment_scores > 0) / len(sentiment_scores), 2),
-            round(100 * sum(sentiment_scores == 0) / len(sentiment_scores), 2),
-            round((100 * sum(sentiment_scores < 0) / len(sentiment_scores)), 2)))
+        print("Average sentiment score: {}".format(round(sentiment_scores.mean(), 2)))
+        print("{}% of the comments are positive,； {}% of the comments are neutral; {}% of the comments are negative".
+            format(
+                round(100 * sum(sentiment_scores > 0) / len(sentiment_scores), 2),
+                round(100 * sum(sentiment_scores == 0) / len(sentiment_scores), 2),
+                round((100 * sum(sentiment_scores < 0) / len(sentiment_scores)), 2)
+            )
+        )
         plt.figure(figsize=(5, 5))
         plt.rc('xtick', labelsize=12)
         plt.rc('ytick', labelsize=12)

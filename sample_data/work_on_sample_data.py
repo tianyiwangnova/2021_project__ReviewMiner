@@ -9,11 +9,13 @@ import pandas as pd
 
 reviews_df = pd.read_csv("./reviews.csv")
 
-#rm = ReviewMiner(reviews_df.head(100), 'id', 'comments')
-rm = ReviewMiner()
-rm.df = 1
-print(rm.df)
-rm.one_time_analysis()
+rm = ReviewMiner(reviews_df.head(100), 'id', 'comments')
+rm.one_time_analysis(_testing=True)
+
+# rm.aspect_opinon_for_all_comments()
+# print(rm.top_aspects)
+
+
 
 #print(ss.sentiment_for_one_comment(ss.df.iloc[10,1]))
 

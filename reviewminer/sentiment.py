@@ -1,4 +1,4 @@
-from src.reviewminer.aspect_opinion import *
+from reviewminer.aspect_opinion import *
 import plotly.express as px
 
 
@@ -73,13 +73,13 @@ class SentimentScore(AspectOpinionExtractor):
             )
         )
         plt.figure(figsize=(5, 5))
-        plt.rc('xtick', labelsize=12)
-        plt.rc('ytick', labelsize=12)
+        plt.rc('xtick', labelsize=15)
+        plt.rc('ytick', labelsize=15)
 
         fig, ax = plt.subplots()
         ax.hist(sentiment_scores)
         ax.set_title('Sentiment scores of all comments (avg: {})'.format(round(sentiment_scores.mean(), 2)),
-                     fontsize = 12)
+                     fontsize = 20)
 
         if not _testing:
             plt.show()
@@ -121,7 +121,11 @@ class SentimentScore(AspectOpinionExtractor):
         sentiment_scores = [self.sentiment_for_one_aspect(i) for i in aspects]
 
         aspects_sentiments = pd.DataFrame(dict(r=sentiment_scores, theta=aspects))
-        fig = px.line_polar(aspects_sentiments, r='r', theta='theta', line_close=True)
+        fig = px.line_polar(aspects_sentiments,
+                            r='r',
+                            theta='theta',
+                            line_close=True,
+                            title='Sentiment scores of the most common aspects')
 
         if not _testing:
             fig.show()
@@ -177,8 +181,8 @@ class SentimentScore(AspectOpinionExtractor):
             {'aspect': list(count_df.keys()), 'numbers_of_negative_sentences': list(count_df.values())}).sort_values(
             "numbers_of_negative_sentences", ascending=False)
 
-        plt.rc('xtick', labelsize=12)
-        plt.rc('ytick', labelsize=12)
+        plt.rc('xtick', labelsize=20)
+        plt.rc('ytick', labelsize=20)
         plt.figure(figsize=(15, 5))
         plt.xticks(rotation=90)
         ax = sns.barplot(x='aspect', y="numbers_of_negative_sentences", data=count_df[:20])

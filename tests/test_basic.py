@@ -1,4 +1,4 @@
-from src.reviewminer.basic import *
+from reviewminer.basic import *
 import pandas as pd
 import pytest
 
@@ -25,12 +25,17 @@ class TestReviews(object):
                                                             "review_column"
 
         id_column_exception = 0
-        review_column_exception = 0
         try:
-            sample_review2 = Reviews(self.sample_df, "fake_column1", "fake_column2")
+            sample_review2 = Reviews(self.sample_df, "fake_column1", "comments")
         except ColumnError:
             id_column_exception = 1
+
+        review_column_exception = 0
+        try:
+            sample_review3 = Reviews(self.sample_df, "id", "fake_column2")
+        except ColumnError:
             review_column_exception = 1
+
         assert id_column_exception == 1
         assert review_column_exception == 1
 

@@ -11,6 +11,6 @@ install:
   - pip install seaborn
   - pip install plotly
 script:
-  - pytest --cov=src tests
+  - pytest --cov=reviewminer tests
 after_success:
   - codecov

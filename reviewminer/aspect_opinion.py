@@ -1,5 +1,5 @@
 from textblob import TextBlob
-from src.reviewminer.basic import *
+from reviewminer.basic import *
 import nltk
 from nltk.tokenize import sent_tokenize
 import datetime
@@ -298,7 +298,7 @@ class AspectOpinionExtractor(Reviews):
         :param report_interval: the function will report progress every `report_interval` rows
         :return: a pandas dataframe with id, reviews and the string version of the aspect_opinion_dict
         """
-        df = self.df.copy()
+        df = self.df.dropna().reset_index().drop('index', axis=1).copy()
         id_column = self.id_column
         review_column = self.review_column
 
@@ -405,7 +405,7 @@ class AspectOpinionExtractor(Reviews):
         """
         style.use('fivethirtyeight')
         plt.rcParams.update({'font.size': 10})
-        plt.rcParams['figure.figsize'] = (30, 30)
+        plt.rcParams['figure.figsize'] = (15, 15)
         plt.rcParams['xtick.labelsize'] = 10.0
         plt.rcParams['ytick.labelsize'] = 10.0
 

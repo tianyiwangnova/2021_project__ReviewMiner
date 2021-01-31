@@ -1,4 +1,4 @@
-from src.reviewminer.core import *
+from reviewminer.core import *
 import pytest
 
 class TestReviewMiner(object):

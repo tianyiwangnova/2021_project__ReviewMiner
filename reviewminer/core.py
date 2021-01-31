@@ -1,4 +1,4 @@
-from src.reviewminer.sentiment import *
+from reviewminer.sentiment import *
 
 
 class ReviewMiner(SentimentScore):

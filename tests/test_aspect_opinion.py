@@ -1,4 +1,4 @@
-from src.reviewminer.aspect_opinion import *
+from reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 

@@ -18,11 +18,17 @@ class ReviewMiner(SentimentScore):
         """
         SentimentScore.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
-    def one_time_analysis(self, _testing = False):
+    def one_time_analysis(self, report_interval = 500,_testing = False):
+        """
+        One time analysis to display popular aspects and opinions, distribution of sentiment scores of each comment,
+        sentiment scores for common aspects,
+
+        :param report_interval: When extracting all the aspects and opinions, the function will report progress
+                                for every report_interval comments
+        """
 
         try:
-            if not isinstance(self.df, pd.DataFrame):
-                raise AttributeError("`df`(the review data) should be a pandas DataFrame")
+            self.df.shape
         except AttributeError:
             print("Please assign your review data to the class by `ReviewMiner.df = <your df>`, " \
                   "The table should be a pandas DataFrame. Please specify the id_column and review_" \
@@ -30,7 +36,7 @@ class ReviewMiner(SentimentScore):
 
         print("========= Popular aspects and opinions in the data =========")
 
-        self.aspect_opinon_for_all_comments()
+        self.aspect_opinon_for_all_comments(report_interval = report_interval)
         self.popular_aspects_view(_testing=_testing)
 
         print("========= Sentiment Analysis =========")

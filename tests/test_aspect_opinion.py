@@ -2,6 +2,7 @@ from reviewminer.aspect_opinion import *
 import pandas as pd
 import pytest
 
+
 class TestAspectOpinionExtractor(object):
 
     sentence = 'Orange juice is healthier than and hot coffee'

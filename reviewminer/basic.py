@@ -25,7 +25,9 @@ class Reviews:
         """
         if df is not None:
 
-            self.df = df
+            if not isinstance(df, pd.DataFrame):
+                raise AttributeError("`df`(the review data) should be a pandas DataFrame")
+            self._df = df
 
             if id_column is not None:
                 self._examine_column(df, id_column)
@@ -61,6 +63,10 @@ class Reviews:
     def review_column(self):
         return self._review_column
 
+    @property
+    def df(self):
+        return self._df
+
     @id_column.setter
     def id_column(self, new_id_column):
         self._examine_column(self.df, new_id_column)
@@ -70,3 +76,9 @@ class Reviews:
     def review_column(self, new_review_column):
         self._examine_column(self.df, new_review_column)
         self._review_column = new_review_column
+
+    @df.setter
+    def df(self, df):
+        if not isinstance(df, pd.DataFrame):
+            raise AttributeError("`df`(the review data) should be a pandas DataFrame")
+        self._df = df

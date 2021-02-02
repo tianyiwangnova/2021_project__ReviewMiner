@@ -8,9 +8,14 @@ print("comment" in reviews_df.columns)
 
 
 
-rm = ReviewMiner(reviews_df.head(100), "id", "comments")
-rm.aspect_opinon_for_all_comments()
-rm.overall_sentiment(_testing=True)
+rm = ReviewMiner(reviews_df.head(100), 'id', 'comments')
+
+print(rm.negative_comments_view())
+
+#isinstance(rm.return_negative_comments_of_aspect('bed'), list) is True
+
+# rm.aspect_opinon_for_all_comments()
+# rm.overall_sentiment(_testing=True)
 
 #rm.id_column = 1
 #rm._examine_id_column(1)

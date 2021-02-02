@@ -39,6 +39,13 @@ class TestReviews(object):
         assert id_column_exception == 1
         assert review_column_exception == 1
 
+        df_not_dataframe = 0
+        try:
+            sample_review4 = Reviews(1, 'id', 'comments')
+        except AttributeError:
+            df_not_dataframe = 1
+        assert df_not_dataframe == 1
+
     def test_column_setters(self):
         sample_review = Reviews(self.sample_df)
         id_column_exception = 0
@@ -58,6 +65,14 @@ class TestReviews(object):
         assert sample_review.id_column == 'id'
         assert sample_review.review_column == 'comment'
 
+    def test_df_setter(self):
+        df_not_dataframe = 0
+        try:
+            sample_review = Reviews()
+            sample_review.df = 1
+        except AttributeError:
+            df_not_dataframe = 1
+        assert df_not_dataframe == 1
 
 
 

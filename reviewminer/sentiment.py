@@ -25,7 +25,7 @@ class SentimentScore(AspectOpinionExtractor):
     @staticmethod
     def sentiment_for_one_comment(comment: str) -> float:
         """
-        calcualte sentiment score for one comment ==> the mean of (polarity * subjectivity) for each sentence
+        calculalte sentiment score for one comment ==> the mean of (polarity * subjectivity) for each sentence
         (if the sentence has a non-zero polarity)
 
         :param comment: the comment (which can consist of multiple sentences)
@@ -159,9 +159,9 @@ class SentimentScore(AspectOpinionExtractor):
         for n in all_negative_comments:
             aspects = self.aspect_extractor(n)
             for a in aspects:
-                if a in result:
+                if a in result and n not in result[a]:
                     result[a].append(n)
-                else:
+                elif a not in result:
                     result[a] = [n]
         self.negative_comments_by_aspects_dict = result
         return result
@@ -171,9 +171,9 @@ class SentimentScore(AspectOpinionExtractor):
         Barplot on the numbers of negative sentences of each aspect
         """
         try:
-            count_df = self.negative_comments_by_aspects_dict
+            count_df = self.negative_comments_by_aspects_dict.copy()
         except AttributeError:
-            count_df = self.negative_comments_by_aspects()
+            count_df = self.negative_comments_by_aspects().copy()
 
         for a in count_df:
             count_df[a] = len(count_df[a])
@@ -192,3 +192,21 @@ class SentimentScore(AspectOpinionExtractor):
             plt.show()
         else:
             return ax
+
+    def return_negative_comments_of_aspect(self, aspect: str) -> list:
+        """
+        Return all the negative comments related to an aspect in a list
+
+        :param aspect: the aspect for analyzing
+        :return: a list of all the related negative comments
+        """
+        try:
+            negatives = self.negative_comments_by_aspects_dict.copy()
+        except AttributeError:
+            negatives = self.negative_comments_by_aspects().copy()
+
+        if aspect in negatives:
+            return negatives[aspect]
+        else:
+            print("There's no negative comments about '{}'".format(aspect))
+            return list()

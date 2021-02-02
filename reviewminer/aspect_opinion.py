@@ -1,16 +1,17 @@
-from textblob import TextBlob
-from reviewminer.basic import *
+import datetime
+import matplotlib.pyplot as plt
+import matplotlib.style as style
+import seaborn as sns
+
 import nltk
 from nltk.tokenize import sent_tokenize
-import datetime
+from textblob import TextBlob
+
+from reviewminer.basic import *
 
 nltk.download('brown')
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
-
-import matplotlib.pyplot as plt
-import matplotlib.style as style
-import seaborn as sns
 
 style.use('fivethirtyeight')
 plt.rc('xtick', labelsize=20)
@@ -19,7 +20,7 @@ plt.rc('ytick', labelsize=20)
 
 class AspectOpinionExtractor(Reviews):
     """
-    Extract aspects and opnions from the reviews data
+    Extract aspects and opinions from the reviews data
     """
 
     def __init__(self,
@@ -126,11 +127,11 @@ class AspectOpinionExtractor(Reviews):
         """
         Check whether an aspect has an opinion
         e.g. "{'building':'tall beautiful magnificent', 'music':'classic pop calm'}" -->
-        The aspect "building" has the opinion word "tall" but it doesn't have the opnion word "pop"
+        The aspect "building" has the opinion word "tall" but it doesn't have the opinion word "pop"
 
         :param dict_string: a dictionary in string (e.g. "{'a': 'apple', 'b': 'boy'}")
         :param aspect: an aspect (a word)
-        :param opinion: an opnion (a word)
+        :param opinion: an opinion (a word)
         :return: bool
         """
         opinions = eval(dict_string)[aspect].lower().split()
@@ -181,7 +182,7 @@ class AspectOpinionExtractor(Reviews):
 
         :param first_word_index: the index of the first word in the aspect in the sentence
         :param sentence_blob: the sentence blob where the aspect locates
-        :return: the attributes of the aspect in a string (words are seperated by ' ')
+        :return: the attributes of the aspect in a string (words are separated by ' ')
         """
         pref_words = []
 
@@ -208,7 +209,7 @@ class AspectOpinionExtractor(Reviews):
 
         :param ca_last_index: the index of the last word in the aspect in the sentence
         :param sentence_blob: the sentence blob where the aspect locates
-        :return: the attributes of the aspect in a string (words are seperated by ' ')
+        :return: the attributes of the aspect in a string (words are separated by ' ')
         """
         suff_words = []
 
@@ -239,7 +240,7 @@ class AspectOpinionExtractor(Reviews):
         :param candidate_aspects: a list of aspects for extracting their opinions
         :param sentence_blob: the TextBlob object of the sentence that we are analyzing
         :return: a dictionary with the aspects as keys and the opinions wrapped up as a single string of words
-                 seperated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
+                 separated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
         """
         candidate_aspects_dict = {}
         aspect_opinion_dict = {}
@@ -266,7 +267,7 @@ class AspectOpinionExtractor(Reviews):
 
         :param sentence: the sentence for analyzing
         :return: a dictionary with the aspects as keys and the opinions wrapped up as a single string of words
-                 seperated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
+                 separated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
         """
         sentence = str(sentence).lower()
         sentence_blob = TextBlob(sentence)
@@ -281,7 +282,7 @@ class AspectOpinionExtractor(Reviews):
 
         :param comment: the comment for analyzing
         :return: a dictionary with the aspects as keys and the opinions wrapped up as a single string of words
-                 seperated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
+                 separated with ' ' e.g. {'bedroom': 'sunny spacious', 'wardrobe': 'beautiful'}
         """
         sentences = sent_tokenize(comment)
 
@@ -336,7 +337,7 @@ class AspectOpinionExtractor(Reviews):
 
         :param aspect: aspect (in a string)
         :param num_top_words: numbers of most common opinions
-        :return: a dataframe with the most popular opnion words associated with the aspect
+        :return: a dataframe with the most popular opinion words associated with the aspect
         """
         ao_df = self.aspects_opinions_df.copy()
         df = self.df_with_aspects_opinions.copy()
@@ -365,9 +366,9 @@ class AspectOpinionExtractor(Reviews):
         """
         plot popular opinions around an aspect;
         For example, we are interested in what people say about "staff",
-        We pick the top n popular words people used to describe staff and calcualte among those who have expressed
+        We pick the top n popular words people used to describe staff and calculalte among those who have expressed
         opinion towards "staff", how many percentage of them used certain words;
-        The output will be a bar chart that shows the most popular opnion words associated with the aspect, and
+        The output will be a bar chart that shows the most popular opinion words associated with the aspect, and
         their proportions
 
         :param aspect: aspect (in a string)

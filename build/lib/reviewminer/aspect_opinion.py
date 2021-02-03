@@ -38,14 +38,15 @@ class AspectOpinionExtractor(Reviews):
         """
         Reviews.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
-    def aspect_extractor(self, sentence: str) -> list:
+    @staticmethod
+    def aspect_extractor(sentence: str, aspect_mute_list: list = None) -> list:
         """
         Extract aspects (noun phrases and nouns) from a sentence
 
         :param sentence: a sentence
+        :param aspect_mute_list: a list of potential aspects that you want to exclude from the analysis
         :return: a list of aspects in the sentence
         """
-
         sentence = sentence.lower()
         sentence_blob = TextBlob(sentence)
 
@@ -76,6 +77,8 @@ class AspectOpinionExtractor(Reviews):
 
         # merge the results
         candidate_aspects = noun_phrases + nouns_2
+        aspect_mute_list = ['i'] + aspect_mute_list if isinstance(aspect_mute_list, list) else ['i']
+        candidate_aspects = [a for a in candidate_aspects if a not in aspect_mute_list]
 
         return candidate_aspects
 
@@ -287,9 +290,8 @@ class AspectOpinionExtractor(Reviews):
 
         aspect_opinion_dict = {}
         for sentence in sentences:
-            aspect_opinion_dict = self._merge_two_dicts(
-                aspect_opinion_dict,
-                self._aspect_opinion_for_one_sentence(sentence))
+            aspect_opinion_dict = self._merge_two_dicts(aspect_opinion_dict,
+                                                        self._aspect_opinion_for_one_sentence(sentence))
         return aspect_opinion_dict
 
     def aspect_opinon_for_all_comments(self, report_interval: int = None):
@@ -421,8 +423,7 @@ class AspectOpinionExtractor(Reviews):
         plt.rcParams['ytick.labelsize'] = 10.0
 
         df = self.df_with_aspects_opinions.copy()
-        self.top_aspects = self.aspects_opinions_df.aspects \
-                               [~self.aspects_opinions_df['aspects'].isin(self.aspect_mute_list)][:9].values
+        self.top_aspects = self.aspects_opinions_df.aspects[:9].values
 
         fig, axes = plt.subplots(3, 3)
         x = [0, 0, 0, 1, 1, 1, 2, 2, 2]

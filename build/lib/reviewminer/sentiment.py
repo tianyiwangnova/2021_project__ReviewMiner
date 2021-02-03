@@ -181,8 +181,6 @@ class SentimentScore(AspectOpinionExtractor):
             {'aspect': list(count_df.keys()), 'numbers_of_negative_sentences': list(count_df.values())}).sort_values(
             "numbers_of_negative_sentences", ascending=False)
 
-        count_df = count_df[~count_df['aspect'].isin(self.aspect_mute_list)]
-
         plt.rc('xtick', labelsize=20)
         plt.rc('ytick', labelsize=20)
         plt.figure(figsize=(15, 5))

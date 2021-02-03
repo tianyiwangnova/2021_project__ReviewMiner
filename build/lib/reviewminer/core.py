@@ -18,12 +18,11 @@ class ReviewMiner(SentimentScore):
         """
         SentimentScore.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
-    def one_time_analysis(self, aspect_mute_list: list = None, report_interval = None,_testing = False):
+    def one_time_analysis(self, report_interval = None,_testing = False):
         """
         One time analysis to display popular aspects and opinions, distribution of sentiment scores of each comment,
         sentiment scores for common aspects,
 
-        :param aspect_mute_list: a list of potential aspects that you want to exclude from the analysis
         :param report_interval: When extracting all the aspects and opinions, the function will report progress
                                 for every report_interval comments
         """

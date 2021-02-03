@@ -62,8 +62,11 @@ class TestReviews(object):
 
         sample_review.id_column = 'id'
         sample_review.review_column = 'comment'
+        sample_review.aspect_mute_list = ['apple','pear']
         assert sample_review.id_column == 'id'
         assert sample_review.review_column == 'comment'
+        assert sample_review.aspect_mute_list == ['apple','pear','i']
+
 
     def test_df_setter(self):
         df_not_dataframe = 0
@@ -73,6 +76,17 @@ class TestReviews(object):
         except AttributeError:
             df_not_dataframe = 1
         assert df_not_dataframe == 1
+
+    def test_aspect_mute_list_setter(self):
+        aspect_mute_list_wrong = 0
+        try:
+            sample_review = Reviews()
+            sample_review.aspect_mute_list = 1
+        except AttributeError:
+            aspect_mute_list_wrong = 1
+        assert aspect_mute_list_wrong == 1
+
+
 
 
 

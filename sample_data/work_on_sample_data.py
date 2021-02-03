@@ -10,7 +10,13 @@ print("comment" in reviews_df.columns)
 
 rm = ReviewMiner(reviews_df.head(100), 'id', 'comments')
 
-print(rm.negative_comments_view())
+rm.aspect_opinon_for_all_comments()
+rm.popular_aspects_view(_testing=True)
+print(rm.top_aspects)
+rm.aspect_mute_list = ['room']
+print('room'  not in rm.top_aspects)
+
+
 
 #isinstance(rm.return_negative_comments_of_aspect('bed'), list) is True
 

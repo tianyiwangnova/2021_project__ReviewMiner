@@ -1,0 +1,12 @@
+README.md
+setup.py
+reviewminer/__init__.py
+reviewminer/aspect_opinion.py
+reviewminer/basic.py
+reviewminer/core.py
+reviewminer/sentiment.py
+reviewminer.egg-info/PKG-INFO
+reviewminer.egg-info/SOURCES.txt
+reviewminer.egg-info/dependency_links.txt
+reviewminer.egg-info/requires.txt
+reviewminer.egg-info/top_level.txt

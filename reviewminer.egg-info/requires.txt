@@ -1,0 +1,10 @@
+pandas
+textblob
+nltk
+datetime
+seaborn
+plotly
+codecov
+pytest
+pytest-cov
+pytest-mpl

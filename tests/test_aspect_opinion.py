@@ -116,3 +116,9 @@ class TestAspectOpinionExtractor(object):
     @pytest.mark.mpl_image_compa
     def test_popular_aspects_view(self):
         return self.aoe_with_reivews.popular_aspects_view(_testing=True)
+
+    def test_assign_new_muting_aspects(self):
+        self.aoe_with_reivews.popular_aspects_view(_testing=True)
+        self.aoe_with_reivews.aspect_mute_list = ['room']
+        print(self.aoe_with_reivews.top_aspects)
+        assert 'room' not in self.aoe_with_reivews.top_aspects

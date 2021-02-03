@@ -39,7 +39,7 @@ class TestSentimentScore(object):
         assert len(self.ss.return_all_negative_sentences()) == 23
 
     def test_negative_comments_by_aspects(self):
-        assert len(self.ss.negative_comments_by_aspects()) == 124
+        assert len(self.ss.negative_comments_by_aspects()) == 125
 
     @pytest.mark.mpl_image_compa
     def test_negative_comments_view(self):
@@ -49,4 +49,3 @@ class TestSentimentScore(object):
          assert len(self.ss.return_negative_comments_of_aspect('bed')) == 1
          assert len(self.ss1.return_negative_comments_of_aspect('bed')) == 1
          assert len(self.ss.return_negative_comments_of_aspect('abcd')) == 0
-

@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: reviewminer
+Version: 1.0.0.1
+Summary: Comprehensive text analysis on customers reviews data
+Home-page: UNKNOWN
+Author: Tianyi Wang
+Author-email: tw2567@columbia.edu
+License: UNKNOWN
+Description: # ReviewMiner
+        
+        [![PyPI version](https://badge.fury.io/py/reviewminer.svg)](https://badge.fury.io/py/reviewminer)
+        [![Build Status](https://travis-ci.org/tianyiwangnova/2021_project__ReviewMiner.svg?branch=main)](https://travis-ci.org/tianyiwangnova/2021_project__ReviewMiner)
+        [![codecov](https://codecov.io/gh/tianyiwangnova/2021_project__ReviewMiner/branch/main/graph/badge.svg?token=X8OKTSU13D)](https://codecov.io/gh/tianyiwangnova/2021_project__ReviewMiner)
+        
+        Author: Tianyi Wang
+        
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Description-Content-Type: text/markdown

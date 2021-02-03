@@ -45,9 +45,6 @@ class Reviews:
         else:
             print("There's no reviews data")
 
-        # aspect_mute_list: a list of potential aspects that you want to exclude from the analysis
-        self._aspect_mute_list = ['i']
-
     @staticmethod
     def _examine_column(df, column):
         """
@@ -70,13 +67,6 @@ class Reviews:
     def df(self):
         return self._df
 
-    @property
-    def aspect_mute_list(self):
-        """
-        aspect_mute_list: a list of potential aspects that you want to exclude from the analysis
-        """
-        return self._aspect_mute_list
-
     @id_column.setter
     def id_column(self, new_id_column):
         self._examine_column(self.df, new_id_column)
@@ -92,24 +82,3 @@ class Reviews:
         if not isinstance(df, pd.DataFrame):
             raise AttributeError("`df`(the review data) should be a pandas DataFrame")
         self._df = df
-
-    @aspect_mute_list.setter
-    def aspect_mute_list(self, new_aspect_mute_list):
-        """
-        :param mode: "append" or "overwrite"; "append"--> append the new list to existing list; "overwrite" -->
-                    overwrite the current list
-        """
-        if not isinstance(new_aspect_mute_list, list):
-            raise AttributeError("Please specify a list")
-
-        self._aspect_mute_list = new_aspect_mute_list + ['i']
-
-        # if top_aspects exists, overwrite it with the newly calculated top_aspects (because now we have a new
-        # aspect_mute_list)
-        try:
-            self.top_aspects = self.aspects_opinions_df\
-            [~self.aspects_opinions_df['aspects'].isin(self.aspect_mute_list)]\
-            .aspects[:9]\
-            .values
-        except:
-            pass

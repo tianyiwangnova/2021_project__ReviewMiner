@@ -6,11 +6,11 @@
 
 `reviewminer` is built for **analyzing customer reviews, or any text datasets that are similar to review data _(short opinions 
 collected from multiple individuals)_**. It is built on top of `nltk` and `TextBlob`. 
-`reviewMiner` takes the pain out of learning NLP packages and building analytics pipelines from scratch. It provides a handy tool 
-for the users to quickly organize reviews data into digestible insights. 
+`reviewMiner` takes the pain out of building NLP pipelines and provides handy tools 
+for the users to quickly organize review data into digestible insights. 
 
 Features:
-* **Aspect and opinion extraction** The key methodology in this package is aspect-based opinoins mining. The package has 
+* **Aspects and opinions extraction** The key methodology in this package is aspect-based opinoins mining. The package has 
 its own algorithm to extract aspects and the related opinion words from the review data. 
 * **Sentiment on comment and aspect level** The package can offer sentiment scores on both comment level and aspect level
 * **Negative reviews investigation** The users can quickly display the negative sentences in the comments. They can also 
@@ -62,7 +62,7 @@ describe them. In each bar chart, the heights represent the percentages of the p
 
 From this chart you can quickly compare customers' average sentiment on each of the common aspects. Here "size" seems to be an aspect that customers are not quite satisfied with.
 
-* Aspects with the most negative comments
+* **Aspects with the most negative comments**
 ![negative](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/aspects_negative_example.png)
 
 ### Exclude certain aspects
@@ -75,8 +75,8 @@ print("After:", sample_rm.top_aspects)
 ```
 ![exclude](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/top_aspects_example.png)
 
-When aspect_mute_list has changed, the visualizations will change as well when the related methods are calling, but the 
-base intermediate output tables (e.g. aspect_opinion_df) won't change.
+When `aspect_mute_list` has changed, the visualizations will change as well when the related methods are calling, but the 
+base intermediate output tables (e.g. `aspect_opinion_df`) won't change.
 
 ### Check out negative comments of an aspect
 
@@ -92,6 +92,10 @@ sample_rm.negative_comments_by_aspects_dict['size']
 sample_rm.single_aspect_view("material")
 ```
 
+[material](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/material.png)
+
+*This dataset is not very large so the numbers are not quite prominent.*
+
 ### Radar chart of average sentiments for a list of aspects
 
 ```python
@@ -101,12 +105,12 @@ sample_rm.aspects_radar_plot(['shirt','skirt','sweater','blouse','jacket','dress
 
 ## Tips
 
-* It’s better to feed in review data on a specific product or service. If you only run it on the review data for a specific 
-ramen restaurant, it’s easier to find meaningful aspects. If you feed in amazon reviews for 5 totally different
+* It’s better to feed in review data on a specific product or service. If you run it on the review data for a specific 
+ramen restaurant, it’s easier to find meaningful aspects. If you feed in Amazon reviews for 5 totally different
  products, the insights might not be very clear.
  
 * Sometimes a sample of the data can tell the whole story. If you have a million reviews, the result will be very similar 
-to the result you get from a random sample of 10k reviews. So don’t rush to feed all your data in, try with a sample first ;)
+to the result you get from a random sample of 10k reviews. Don’t rush to feed all your data in, try with a sample first ;)
 
 
 

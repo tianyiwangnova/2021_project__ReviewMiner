@@ -52,7 +52,7 @@ The function will print out 4 visualizations:
 ![popular](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/popular_aspects_example.png)
 
 This chart displays 9 most common aspects found in the reviews and the most popular opinions words people used to 
-describe them. In each bar chart, the heights show the percentages of the people using the each opinion word.
+describe them. In each bar chart, the heights represent the percentages of the people using the opinion words.
 
 * **Distribution of sentiment scores of all comments**
 ![sentiment](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/sentiment_score_example.png)
@@ -102,12 +102,11 @@ sample_rm.aspects_radar_plot(['shirt','skirt','sweater','blouse','jacket','dress
 ## Tips
 
 * It’s better to feed in review data on a specific product or service. If you only run it on the review data for a specific 
-ramen restaurant, for example, it’s easier to find meaningful aspects. If you feed in amazon reviews for 5 totally different
- products, the result might not be very meaningful.
+ramen restaurant, it’s easier to find meaningful aspects. If you feed in amazon reviews for 5 totally different
+ products, the insights might not be very clear.
  
-* Sometimes a sample of the data can tell the whole story. If you have a million reviews for the unibet app, for example, 
-the result will be very similar to the result you get from a random sample of 10k reviews. So don’t rush to feed all your 
-data in, try with a sample first ;)
+* Sometimes a sample of the data can tell the whole story. If you have a million reviews, the result will be very similar 
+to the result you get from a random sample of 10k reviews. So don’t rush to feed all your data in, try with a sample first ;)
 
 
 

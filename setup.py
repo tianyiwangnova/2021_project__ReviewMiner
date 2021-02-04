@@ -8,7 +8,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(name="reviewminer",
-      version="1.0.0.1",
+      version="1.0.0.2",
       description="Comprehensive text analysis on customers reviews data",
       author="Tianyi Wang",
       url="https://github.com/tianyiwangnova/2021_project__ReviewMiner",
@@ -31,5 +31,9 @@ setup(name="reviewminer",
                 "License :: OSI Approved :: MIT License",
                 "Programming Language :: Python :: 3",
                 "Programming Language :: Python :: 3.7",
-            ]
+            ],
+      project_urls={
+          'Documentation' : 'https://github.com/tianyiwangnova/2021_project__ReviewMiner/wiki/Documentation',
+          'Source Code' : 'https://github.com/tianyiwangnova'
+      }
       )

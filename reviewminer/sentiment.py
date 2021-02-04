@@ -25,7 +25,7 @@ class SentimentScore(AspectOpinionExtractor):
     @staticmethod
     def sentiment_for_one_comment(comment: str) -> float:
         """
-        calculalte sentiment score for one comment ==> the mean of (polarity * subjectivity) for each sentence
+        Calculalte sentiment score for one comment ==> the mean of (polarity * subjectivity) for each sentence
         (if the sentence has a non-zero polarity)
 
         :param comment: the comment (which can consist of multiple sentences)
@@ -104,7 +104,8 @@ class SentimentScore(AspectOpinionExtractor):
 
         opinions_polarities = [TextBlob(i).sentences[0].sentiment.polarity for i in opinions if
                                TextBlob(i).sentences[0].sentiment.polarity != 0]
-        return sum(opinions_polarities) / len(opinions_polarities)
+        aspect_sent_score = sum(opinions_polarities) / len(opinions_polarities)
+        return aspect_sent_score
 
     def aspects_radar_plot(self, aspects: list, _testing=False):
         """

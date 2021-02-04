@@ -1,11 +1,11 @@
-# ReviewMiner
+# ReviewMiner 
 
 [![PyPI version](https://badge.fury.io/py/reviewminer.svg)](https://badge.fury.io/py/reviewminer)
 [![Build Status](https://travis-ci.org/tianyiwangnova/2021_project__ReviewMiner.svg?branch=main)](https://travis-ci.org/tianyiwangnova/2021_project__ReviewMiner)
 [![codecov](https://codecov.io/gh/tianyiwangnova/2021_project__ReviewMiner/branch/main/graph/badge.svg?token=X8OKTSU13D)](https://codecov.io/gh/tianyiwangnova/2021_project__ReviewMiner)
 
-`ReviewMiner` is built for analyzing customer reviews, or any text datasets that are similar to review data *(short opinions 
-collected from multiple individuals)* . The package is built on top of a variety of natural language processing packages ---- 
+`ReviewMiner` is built for **analyzing customer reviews, or any text datasets that are similar to review data *(short opinions 
+collected from multiple individuals)* **. The package is built on top of a variety of natural language processing packages ---- 
 `nltk`, `TextBlob` and `gensim`. The purpose is to allow users to run multiple common text analysis on the review data 
 at one time, providing intuitive visualizations that can help the users uncover insights, and intermediate output tables that can be used for
 further investigations. 
@@ -19,10 +19,10 @@ investigate negative comments about certain aspects
 
 ## Installation
 ```
-pip install reviewminer
+$ pip install reviewminer
 ```
 
-### Quickstart
+## Quickstart
 
 #### One-stop text analysis
 ```python
@@ -34,7 +34,7 @@ reviews_df = pd.read_csv("https://raw.githubusercontent.com/tianyiwangnova/2021_
                                  "sample_data/reviews.csv")
 
 # create a reviewminer object (for an example, we will just use the first 500 rows in the data
-sample_rm = rm.ReviewMiner(reviews_df.head(500), "Id", 'Text')
+sample_rm = rm.ReviewMiner(reviews_df.head(500), id_column="Id", review_column='Text')
 
 # run the one time analysis and you will see 
 sample_rm.one_time_analysis()
@@ -43,16 +43,19 @@ sample_rm.one_time_analysis()
 The function will print out 4 visualizations:
 
 * Popular aspects and opinions
+![popular](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/popular_aspects_example.png)
 
 This chart displays 9 most common aspects found in the reviews and the most popular opinions words people used to 
 describe them. In each bar chart, the heights show the percentages of the people using the each opinion word.
 
 * Distribution of sentiment scores of all comments
+![sentiment](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/sentiment_score_example.png)
 
 * Radar chart of the most common aspects and their average sentiment scores
+![radar](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/radar_chart_example.png)
 
 * Aspects with the most negative comments
-
+![negative](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/aspects_negative_example.png)
 
 #### Exclude certain aspects
 

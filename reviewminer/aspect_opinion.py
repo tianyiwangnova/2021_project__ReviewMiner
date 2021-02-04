@@ -38,7 +38,8 @@ class AspectOpinionExtractor(Reviews):
         """
         Reviews.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
-    def aspect_extractor(self, sentence: str) -> list:
+    @staticmethod
+    def aspect_extractor(sentence: str) -> list:
         """
         Extract aspects (noun phrases and nouns) from a sentence
 
@@ -299,7 +300,8 @@ class AspectOpinionExtractor(Reviews):
         :param report_interval: the function will report progress every `report_interval` rows
         :return: a pandas dataframe with id, reviews and the string version of the aspect_opinion_dict
         """
-        df = self.df.dropna().reset_index().drop('index', axis=1).copy()
+        df = self.df[self.df[self.review_column].notna()].copy()
+        df = df.reset_index().drop('index', axis=1)
         id_column = self.id_column
         review_column = self.review_column
 
@@ -369,10 +371,10 @@ class AspectOpinionExtractor(Reviews):
         return aspect_plot
 
     def single_aspect_view(self, aspect: str,
-                           num_top_words=10,
-                           change_figsize=True,
-                           xticks_rotation=45,
-                           _testing=False):
+                           num_top_words: int = 10,
+                           change_figsize: bool = True,
+                           xticks_rotation: int = 45,
+                           _testing = False):
         """
         plot popular opinions around an aspect;
         For example, we are interested in what people say about "staff",

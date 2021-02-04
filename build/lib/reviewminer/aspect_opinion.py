@@ -39,14 +39,14 @@ class AspectOpinionExtractor(Reviews):
         Reviews.__init__(self, df=df, id_column=id_column, review_column=review_column)
 
     @staticmethod
-    def aspect_extractor(sentence: str, aspect_mute_list: list = None) -> list:
+    def aspect_extractor(sentence: str) -> list:
         """
         Extract aspects (noun phrases and nouns) from a sentence
 
         :param sentence: a sentence
-        :param aspect_mute_list: a list of potential aspects that you want to exclude from the analysis
         :return: a list of aspects in the sentence
         """
+
         sentence = sentence.lower()
         sentence_blob = TextBlob(sentence)
 
@@ -77,8 +77,6 @@ class AspectOpinionExtractor(Reviews):
 
         # merge the results
         candidate_aspects = noun_phrases + nouns_2
-        aspect_mute_list = ['i'] + aspect_mute_list if isinstance(aspect_mute_list, list) else ['i']
-        candidate_aspects = [a for a in candidate_aspects if a not in aspect_mute_list]
 
         return candidate_aspects
 
@@ -290,8 +288,9 @@ class AspectOpinionExtractor(Reviews):
 
         aspect_opinion_dict = {}
         for sentence in sentences:
-            aspect_opinion_dict = self._merge_two_dicts(aspect_opinion_dict,
-                                                        self._aspect_opinion_for_one_sentence(sentence))
+            aspect_opinion_dict = self._merge_two_dicts(
+                aspect_opinion_dict,
+                self._aspect_opinion_for_one_sentence(sentence))
         return aspect_opinion_dict
 
     def aspect_opinon_for_all_comments(self, report_interval: int = None):
@@ -301,7 +300,8 @@ class AspectOpinionExtractor(Reviews):
         :param report_interval: the function will report progress every `report_interval` rows
         :return: a pandas dataframe with id, reviews and the string version of the aspect_opinion_dict
         """
-        df = self.df.dropna().reset_index().drop('index', axis=1).copy()
+        df = self.df[self.df[self.review_column].notna()].copy()
+        df = df.reset_index().drop('index', axis=1)
         id_column = self.id_column
         review_column = self.review_column
 
@@ -371,10 +371,10 @@ class AspectOpinionExtractor(Reviews):
         return aspect_plot
 
     def single_aspect_view(self, aspect: str,
-                           num_top_words=10,
-                           change_figsize=True,
-                           xticks_rotation=45,
-                           _testing=False):
+                           num_top_words: int = 10,
+                           change_figsize: bool = True,
+                           xticks_rotation: int = 45,
+                           _testing = False):
         """
         plot popular opinions around an aspect;
         For example, we are interested in what people say about "staff",
@@ -423,7 +423,8 @@ class AspectOpinionExtractor(Reviews):
         plt.rcParams['ytick.labelsize'] = 10.0
 
         df = self.df_with_aspects_opinions.copy()
-        self.top_aspects = self.aspects_opinions_df.aspects[:9].values
+        self.top_aspects = self.aspects_opinions_df.aspects \
+                               [~self.aspects_opinions_df['aspects'].isin(self.aspect_mute_list)][:9].values
 
         fig, axes = plt.subplots(3, 3)
         x = [0, 0, 0, 1, 1, 1, 2, 2, 2]

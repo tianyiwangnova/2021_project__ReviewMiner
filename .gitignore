@@ -6,3 +6,7 @@ src/.DS_Store
 tests/.DS_Store
 .DS_Store
 *.pyc
+*.whl
+*.whl
+dist/reviewminer-1.0.0.1-py3-none-any.whl
+*.gz

@@ -104,7 +104,7 @@ class SentimentScore(AspectOpinionExtractor):
 
         opinions_polarities = [TextBlob(i).sentences[0].sentiment.polarity for i in opinions if
                                TextBlob(i).sentences[0].sentiment.polarity != 0]
-        aspect_sent_score = sum(opinions_polarities) / len(opinions_polarities)
+        aspect_sent_score = sum(opinions_polarities) / len(opinions_polarities) if len(opinions_polarities) > 0 else 0
         return aspect_sent_score
 
     def aspects_radar_plot(self, aspects: list, _testing=False):

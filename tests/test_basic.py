@@ -62,11 +62,10 @@ class TestReviews(object):
 
         sample_review.id_column = 'id'
         sample_review.review_column = 'comment'
-        sample_review.aspect_mute_list = ['apple','pear']
+        sample_review.aspect_mute_list = ['apple', 'PeAr']
         assert sample_review.id_column == 'id'
         assert sample_review.review_column == 'comment'
-        assert sample_review.aspect_mute_list == ['apple','pear','i']
-
+        assert sample_review.aspect_mute_list == ['apple', 'pear', 'i']
 
     def test_df_setter(self):
         df_not_dataframe = 0

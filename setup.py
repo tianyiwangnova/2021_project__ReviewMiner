@@ -33,7 +33,8 @@ setup(name="reviewminer",
                 "Programming Language :: Python :: 3.7",
             ],
       project_urls={
-          'Documentation' : 'https://github.com/tianyiwangnova/2021_project__ReviewMiner/wiki/Documentation',
-          'Source Code' : 'https://github.com/tianyiwangnova'
+          'Documentation': 'https://github.com/tianyiwangnova/2021_project__ReviewMiner/wiki/Documentation',
+          'Source Code': 'https://github.com/tianyiwangnova/2021_project__ReviewMiner',
+          'Knowledge Center': 'https://github.com/tianyiwangnova/2021_project__ReviewMiner/wiki/Knowledge-Center'
       }
       )

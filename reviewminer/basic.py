@@ -102,6 +102,7 @@ class Reviews:
         if not isinstance(new_aspect_mute_list, list):
             raise AttributeError("Please specify a list")
 
+        new_aspect_mute_list = [i.lower() for i in new_aspect_mute_list]
         self._aspect_mute_list = new_aspect_mute_list + ['i']
 
         # if top_aspects exists, overwrite it with the newly calculated top_aspects (because now we have a new

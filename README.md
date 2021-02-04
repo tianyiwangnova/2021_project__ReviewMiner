@@ -24,7 +24,7 @@ $ pip install reviewminer
 
 ## Quickstart
 
-#### One-stop text analysis
+### One-stop text analysis
 ```python
 import reviewminer as rm
 import pandas as pd
@@ -57,7 +57,7 @@ describe them. In each bar chart, the heights show the percentages of the people
 * Aspects with the most negative comments
 ![negative](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/aspects_negative_example.png)
 
-#### Exclude certain aspects
+### Exclude certain aspects
 
 You might want to exclude some aspects. For example, the aspect "everything" can't quite offer valuable insights. 
 Then you can do this:
@@ -67,8 +67,7 @@ sample_rm.popular_aspects_view()
 ```
 You will see that the aspect "everything" disappears from the most common aspect list.
 
-
-
+### 
 
 
 

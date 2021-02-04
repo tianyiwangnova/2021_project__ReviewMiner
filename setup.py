@@ -8,7 +8,7 @@ HERE = pathlib.Path(__file__).parent
 README = (HERE / "README.md").read_text()
 
 setup(name="reviewminer",
-      version="1.0.0.2",
+      version="1.0.0.3",
       description="Comprehensive text analysis on customers reviews data",
       author="Tianyi Wang",
       url="https://github.com/tianyiwangnova/2021_project__ReviewMiner",

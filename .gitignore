@@ -11,3 +11,10 @@ tests/.DS_Store
 dist/reviewminer-1.0.0.1-py3-none-any.whl
 *.gz
 *.whl
+build/lib/reviewminer/sentiment.py
+build/lib/reviewminer/__init__.py
+build/lib/reviewminer/aspect_opinion.py
+build/lib/reviewminer/basic.py
+build/lib/reviewminer/core.py
+*.txt
+reviewminer.egg-info/PKG-INFO

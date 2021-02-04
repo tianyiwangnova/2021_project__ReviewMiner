@@ -6,8 +6,8 @@
 
 `reviewminer` is built for **analyzing customer reviews, or any text datasets that are similar to review data _(short opinions 
 collected from multiple individuals)_**. It is built on top of `nltk` and `TextBlob`. 
-`reviewMiner` takes the pain out of building NLP pipelines and provides handy tools 
-for the users to quickly organize review data into digestible insights. 
+`reviewminer` takes the pain out of building NLP pipelines (for analyzing customer reviews) and provides handy tools 
+for quickly organizing review data into digestible insights. 
 
 Features:
 * **Aspects and opinions extraction** The key methodology in this package is aspect-based opinoins mining. The package has 
@@ -92,7 +92,7 @@ sample_rm.negative_comments_by_aspects_dict['size']
 sample_rm.single_aspect_view("material")
 ```
 
-[material](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/material.png)
+![material](https://raw.githubusercontent.com/tianyiwangnova/2021_project__ReviewMiner/main/sample_data/material.png)
 
 *This dataset is not very large so the numbers are not quite prominent.*
 
